@@ -1,5 +1,4 @@
 ﻿using Invynite.Domain.Entities.Master;
-using Invynite.Domain.Enums;
 
 namespace Invynite.Domain.Entities.Inven;
 
@@ -18,5 +17,5 @@ public class StockMovement
     public decimal Quantity { get; set; }
     public string MovementType { get; set; } = string.Empty;
     public int ReferenceId { get; set; } // ProductionOrderId, PurchaseId, etc.
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; }
 }

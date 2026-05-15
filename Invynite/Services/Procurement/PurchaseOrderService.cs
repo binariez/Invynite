@@ -79,8 +79,13 @@ namespace Invynite.Services.Procurement
         /// <param name="warehouseId">The warehouse which the items will be stored at</param>
         public async Task<ReceivePurchaseOrderResponse> ReceivePurchaseOrder(int purchaseOrderId, int warehouseId)
         {
+            if (await context.Warehouses.AnyAsync(w => w.Id == warehouseId) == false)
+                throw new NotFoundException($"Warehouse with id: {warehouseId} does not exist");
+
             var purchaseOrder = await context.PurchaseOrders
-                .FindAsync(purchaseOrderId);
+                .Include(po => po.PurchaseOrderItems)
+                    .ThenInclude(poi => poi.Material)
+                .FirstOrDefaultAsync(po => po.Id == purchaseOrderId);
 
             if (purchaseOrder == null)
                 throw new NotFoundException($"Purchase order with id: {purchaseOrderId} does not exist.");
@@ -88,16 +93,19 @@ namespace Invynite.Services.Procurement
             if (purchaseOrder.Status != PurchaseOrderStatus.Pending)
                 throw new PurchaseOrderNotPendingException("Can't receive the order because the status is not pending");
 
-            var purchasedItems = await context.PurchaseOrderItems
-                .Where(i => i.PurchaseOrderId == purchaseOrderId)
+            var purchasedItems = purchaseOrder.PurchaseOrderItems
                 .Select(i => new ItemReceivedDto(i.MaterialId, i.Material.Name, i.Quantity))
-                .ToListAsync();
+                .ToList();
 
             var inventories = await context.Inventories
-                .Where(inv => inv.WarehouseId == warehouseId)
-                .ToDictionaryAsync(inv => inv.Id);
+                .Where(inv => 
+                    inv.WarehouseId == warehouseId &&
+                    inv.MaterialId != null)
+                .ToDictionaryAsync(inv => inv.MaterialId!.Value);
 
             var stockMovements = new List<StockMovement>();
+
+            var newMaterials = new List<Inventory>();
 
             using var transaction = await context.Database.BeginTransactionAsync();
 
@@ -111,7 +119,7 @@ namespace Invynite.Services.Procurement
                     }
                     else
                     {
-                        context.Inventories.Add(new Inventory
+                        newMaterials.Add(new Inventory
                         {
                             MaterialId = item.MaterialId,
                             Quantity = item.Quantity,
@@ -125,9 +133,14 @@ namespace Invynite.Services.Procurement
                         Quantity = item.Quantity,
                         WarehouseId = warehouseId,
                         MovementType = "IN",
+                        CreatedAt = DateTime.UtcNow,
                         ReferenceId = purchaseOrderId
                     });
                 }
+
+                await context.Inventories.AddRangeAsync(newMaterials);
+
+                await context.StockMovements.AddRangeAsync(stockMovements);
 
                 purchaseOrder.Status = PurchaseOrderStatus.Received;
 
