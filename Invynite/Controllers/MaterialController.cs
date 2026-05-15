@@ -1,4 +1,4 @@
-﻿using Invynite.Services.Materials;
+﻿using Invynite.Services.Inventories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invynite.Controllers;

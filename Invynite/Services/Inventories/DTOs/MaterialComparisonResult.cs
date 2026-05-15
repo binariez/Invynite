@@ -1,4 +1,4 @@
-﻿namespace Invynite.Services.Materials.DTOs;
+﻿namespace Invynite.Services.Inventories.DTOs;
 
 public record MaterialComparisonResult(
         int MaterialId,

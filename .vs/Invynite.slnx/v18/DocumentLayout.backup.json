@@ -1,16 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\!Web Dev\\Invynite\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA22B3B-5F30-C2CE-6C64-D5C4353947D1}|Invynite\\Invynite.csproj|c:\\!web dev\\invynite\\invynite\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA22B3B-5F30-C2CE-6C64-D5C4353947D1}|Invynite\\Invynite.csproj|solutionrelative:invynite\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0EA22B3B-5F30-C2CE-6C64-D5C4353947D1}|Invynite\\Invynite.csproj|c:\\!web dev\\invynite\\invynite\\services\\procurement\\purchaseorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0EA22B3B-5F30-C2CE-6C64-D5C4353947D1}|Invynite\\Invynite.csproj|solutionrelative:invynite\\services\\procurement\\purchaseorderservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -18,37 +9,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\!Web Dev\\Invynite\\Invynite\\Program.cs",
-              "RelativeDocumentMoniker": "Invynite\\Program.cs",
-              "ToolTip": "C:\\!Web Dev\\Invynite\\Invynite\\Program.cs",
-              "RelativeToolTip": "Invynite\\Program.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACoAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T12:31:34.787Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PurchaseOrderService.cs",
-              "DocumentMoniker": "C:\\!Web Dev\\Invynite\\Invynite\\Services\\Procurement\\PurchaseOrderService.cs",
-              "RelativeDocumentMoniker": "Invynite\\Services\\Procurement\\PurchaseOrderService.cs",
-              "ToolTip": "C:\\!Web Dev\\Invynite\\Invynite\\Services\\Procurement\\PurchaseOrderService.cs",
-              "RelativeToolTip": "Invynite\\Services\\Procurement\\PurchaseOrderService.cs",
-              "ViewState": "AgIAAGwAAAAAAAAAAAAowFQAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-15T12:15:02.979Z",
-              "EditorCaption": ""
             }
           ]
         }

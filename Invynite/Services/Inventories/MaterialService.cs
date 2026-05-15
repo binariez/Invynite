@@ -1,9 +1,9 @@
 ﻿using Invynite.Infrastructure.Data;
 using Invynite.Middlewares.Exceptions;
-using Invynite.Services.Materials.DTOs;
+using Invynite.Services.Inventories.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace Invynite.Services.Materials;
+namespace Invynite.Services.Inventories;
 
 public class MaterialService : IMaterialService
 {

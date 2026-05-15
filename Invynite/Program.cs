@@ -1,6 +1,6 @@
 using Invynite.Infrastructure.Data;
 using Invynite.Middlewares;
-using Invynite.Services.Materials;
+using Invynite.Services.Inventories;
 using Invynite.Services.Procurement;
 using Invynite.Services.Productions;
 using Microsoft.EntityFrameworkCore;
