@@ -1,0 +1,6 @@
+@Invynite_HostAddress = http://localhost:5236
+
+GET {{Invynite_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
