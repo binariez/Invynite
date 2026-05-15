@@ -23,7 +23,7 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // business logic services
-builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IProductlService, ProductService>();
 builder.Services.AddScoped<IProductionOrderService, ProductionOrderService>();
 builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 builder.Services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();

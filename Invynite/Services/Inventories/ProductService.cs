@@ -5,16 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Invynite.Services.Inventories;
 
-public class MaterialService : IMaterialService
+public class ProductService : IProductlService
 {
     private readonly AppDbContext _context;
 
-    public MaterialService(AppDbContext context)
+    public ProductService(AppDbContext context)
     {
         _context = context;
     }
 
-    public async Task<BillOfMaterialItemResponse?> GetMaterialsByProductIdAsync(int productId)
+    public async Task<BillOfMaterialItemResponse> GetMaterialsByProductIdAsync(int productId)
     {
         var materials = await _context.BillOfMaterials
             .Where(b => b.ProductId == productId)
@@ -36,7 +36,7 @@ public class MaterialService : IMaterialService
         return materials;
     }
 
-    public async Task<ProductMaterialResponse?> CountMaterialsByProductIdAsync(int prodId, int quantity)
+    public async Task<ProductMaterialResponse> CountMaterialsByProductIdAsync(int prodId, int quantity)
     {
         var result = await _context.BillOfMaterials
             .Where(bom => bom.ProductId == prodId)

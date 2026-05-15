@@ -7,9 +7,9 @@ namespace Invynite.Controllers;
 [Route("api/[controller]")]
 public class MaterialController : ControllerBase
 {
-    private readonly IMaterialService _materialService;
+    private readonly IProductlService _materialService;
 
-    public MaterialController(IMaterialService materialService)
+    public MaterialController(IProductlService materialService)
     {
         _materialService = materialService;
     }
