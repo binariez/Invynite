@@ -4,21 +4,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Invynite.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-public class MaterialController : ControllerBase
+[Route("api/inventories/[controller]")]
+public class ProductController(IProductlService _productService) : ControllerBase
 {
-    private readonly IProductlService _materialService;
-
-    public MaterialController(IProductlService materialService)
-    {
-        _materialService = materialService;
-    }
+    private readonly IProductlService _productService = _productService;
 
     [HttpGet]
     [Route("{prodId:int}")]
     public async Task<IActionResult> GetMaterialsByProductId(int prodId)
     {
-        var result = await _materialService.GetMaterialsByProductIdAsync(prodId);
+        var result = await _productService.GetMaterialsByProductIdAsync(prodId);
 
         return Ok(result);
     }
@@ -27,7 +22,7 @@ public class MaterialController : ControllerBase
     [Route("count/pid={prodId:int}&qty={quantity:int}")]
     public async Task<IActionResult> CountMaterialsByProductId(int prodId, int quantity)
     {
-        var result = await _materialService.CountMaterialsByProductIdAsync(prodId, quantity);
+        var result = await _productService.CountMaterialsByProductIdAsync(prodId, quantity);
 
         return Ok(result);
     }
