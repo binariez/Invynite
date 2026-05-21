@@ -9,5 +9,6 @@ namespace Invynite.Services.Inventories
         Task DeleteAsync(int matId);
         Task<IEnumerable<SimpleMaterialResponse>> GetAllProductsAsync();
         Task<MaterialResponse> GetByIdAsync(int matId);
+        Task<IEnumerable<LowStockDto>> GetLowStockMaterials();
     }
 }

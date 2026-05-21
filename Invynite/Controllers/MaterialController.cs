@@ -54,5 +54,12 @@ namespace Invynite.Controllers
 
             return NoContent();
         }
+
+        [HttpGet]
+        [Route("low-stock-alert")]
+        public async Task<IActionResult> GetLowStockMaterial()
+        {
+            return Ok(await _materialService.GetLowStockMaterials());
+        }
     }
 }

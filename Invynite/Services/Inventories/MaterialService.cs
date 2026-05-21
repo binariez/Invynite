@@ -136,5 +136,28 @@ namespace Invynite.Services.Inventories
                 existing.UnitOfMeasure
                 );
         }
+
+        public async Task<IEnumerable<LowStockDto>> GetLowStockMaterials()
+        {
+            var result = await context.Inventories
+                .Where(i => i.MaterialId != null && i.Quantity <= 10)
+                .GroupBy(i => new
+                {
+                    i.MaterialId,
+                    i.Material!.Name
+                })
+                .Select(g => new LowStockDto(
+                    g.Key.MaterialId!.Value,
+                    g.Key.Name,
+                    g.Select(i => new LowStockDetail(
+                        i.Warehouse.Name,
+                        i.Quantity
+                    ))
+                    .ToList()
+                ))
+                .ToListAsync();
+
+            return result;
+        }
     }
 }
