@@ -4,6 +4,7 @@ using Invynite.Middlewares.Exceptions;
 using Invynite.Services.Inventories.DTOs;
 using Invynite.Services.Inventories.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Invynite.Services.Inventories
 {
@@ -67,11 +68,45 @@ namespace Invynite.Services.Inventories
                 throw new NotFoundException($"Product with id: {prodId} does not exist");
         }
 
-        public async Task<IEnumerable<SimpleProductResponse>> GetAllProductsAsync()
+        public async Task<IEnumerable<SimpleProductResponse>> GetAllProductsAsync(
+            string? searchTerm,
+            string? sortColumn,
+            string? sortOrder,
+            int page,
+            int pageSize)
         {
-            var products = await context.Products.ToListAsync();
+            IQueryable<Product> productQuery = context.Products;
 
-            var ids = products.Select(r => r.Id).ToList();
+            // filtering by search term
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                productQuery = productQuery.Where(p => p.Name.Contains(searchTerm) ||
+                                                p.SKU.Contains(searchTerm)
+                );
+            }
+
+            // sorting by columns
+            Expression<Func<Product, object>> keySelector = sortColumn?.ToLower() switch
+            {
+                "name" => product => product.Name,
+                "sku" => product => product.SKU,
+                "uom" => product => product.UnitOfMeasure,
+                _ => product => product.Id,
+            };
+
+            // order by ascending or descending
+            if (sortOrder?.ToLower() == "desc")
+            {
+                productQuery = productQuery.OrderByDescending(keySelector);
+            }
+            else
+            {
+                productQuery = productQuery.OrderBy(keySelector);
+            }
+
+            // creating dictionary that contains product id and their current stock
+            // to match it later during materialization
+            var ids = await productQuery.Select(r => r.Id).ToListAsync();
 
             var stockDictionary = await context.Inventories
                 .Where(i => i.ProductId != null && ids.Contains(i.ProductId.Value))
@@ -83,14 +118,23 @@ namespace Invynite.Services.Inventories
                 })
                 .ToDictionaryAsync(x => x.ProductId, x => x.Quantity);
 
-            return products.Select(r => new SimpleProductResponse(
+            // pagination
+            if (page != 0 && pageSize != 0)
+            {
+                productQuery = productQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+            }
+
+            // materialize result
+            return await productQuery.Select(r => new SimpleProductResponse(
                 r.Id,
                 r.Name,
                 r.SKU,
                 stockDictionary.GetValueOrDefault(r.Id, 0),
                 r.UnitOfMeasure
                 )
-            );
+            ).ToListAsync();
         }
 
         public async Task<ProductResponse> GetByIdAsync(int prodId)

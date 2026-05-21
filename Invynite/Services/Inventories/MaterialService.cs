@@ -4,6 +4,7 @@ using Invynite.Middlewares.Exceptions;
 using Invynite.Services.Inventories.DTOs;
 using Invynite.Services.Inventories.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Invynite.Services.Inventories
 {
@@ -66,11 +67,42 @@ namespace Invynite.Services.Inventories
                 throw new NotFoundException($"Material with id: {matId} does not exist");
         }
 
-        public async Task<IEnumerable<SimpleMaterialResponse>> GetAllProductsAsync()
+        public async Task<IEnumerable<SimpleMaterialResponse>> GetAllProductsAsync(
+            string? searchTerm,
+            string? sortColumn,
+            string? sortOrder,
+            int page,
+            int pageSize)
         {
-            var materials = await context.Materials.ToListAsync();
+            IQueryable<Material> materialQuery = context.Materials;
 
-            var ids = materials.Select(m => m.Id).ToList();
+            // filtering by search term
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                materialQuery = materialQuery.Where(m => m.Name.Contains(searchTerm));
+            }
+
+            // sorting by columns
+            Expression<Func<Material, object>> keySelector = sortColumn?.ToLower() switch
+            {
+                "name" => material => material.Name,
+                "uom" => material => material.UnitOfMeasure,
+                _ => material => material.Id
+            };
+
+            // order by ascending or descending
+            if (sortOrder?.ToLower() == "desc")
+            {
+                materialQuery = materialQuery.OrderByDescending(keySelector);
+            }
+            else
+            {
+                materialQuery = materialQuery.OrderBy(keySelector);
+            }
+
+            // creating dictionary that contains material id and their current stock
+            // to match it later during materialization
+            var ids = await materialQuery.Select(m => m.Id).ToListAsync();
 
             var stockDictionary = await context.Inventories
                 .Where(i => i.MaterialId != null && ids.Contains(i.MaterialId.Value))
@@ -82,13 +114,24 @@ namespace Invynite.Services.Inventories
                 })
                 .ToDictionaryAsync(i => i.MaterialId, i => i.Quantity);
 
-            return materials.Select(r => new SimpleMaterialResponse(
-                r.Id,
-                r.Name,
-                stockDictionary.GetValueOrDefault(r.Id, 0),
-                r.UnitOfMeasure
+            // pagination
+            if (page > 0 && pageSize > 0)
+            {
+                materialQuery = materialQuery
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+            }
+
+            // materialize result
+            return await materialQuery
+                .Select(r => new SimpleMaterialResponse(
+                    r.Id,
+                    r.Name,
+                    stockDictionary.GetValueOrDefault(r.Id, 0),
+                    r.UnitOfMeasure
+                    )
                 )
-            );
+                .ToListAsync();
         }
 
         public async Task<MaterialResponse> GetByIdAsync(int matId)

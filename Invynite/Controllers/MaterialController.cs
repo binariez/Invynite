@@ -11,9 +11,14 @@ namespace Invynite.Controllers
         private readonly IMaterialService _materialService = materialService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts(
+            [FromQuery] string? searchTerm,
+            [FromQuery] string? sortColumn,
+            [FromQuery] string? sortOrder,
+            [FromQuery] int page,
+            [FromQuery] int pageSize)
         {
-            return Ok(await _materialService.GetAllProductsAsync());
+            return Ok(await _materialService.GetAllProductsAsync(searchTerm, sortColumn, sortOrder, page, pageSize));
         }
 
         [HttpGet]

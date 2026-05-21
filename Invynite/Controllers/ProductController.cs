@@ -11,9 +11,14 @@ namespace Invynite.Controllers
         private readonly IProductService _productService = productService;
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts()
+        public async Task<IActionResult> GetAllProducts(
+            [FromQuery] string? searchTerm,
+            [FromQuery] string? sortColumn,
+            [FromQuery] string? sortOrder,
+            [FromQuery] int page,
+            [FromQuery] int pageSize)
         {
-            return Ok(await _productService.GetAllProductsAsync());
+            return Ok(await _productService.GetAllProductsAsync(searchTerm, sortColumn, sortOrder, page, pageSize));
         }
 
         [HttpGet]
