@@ -1,4 +1,4 @@
-﻿namespace Invynite.Services.Inventories.DTOs;
+﻿namespace Invynite.Services.BOM.DTOs;
 
 public record BillOfMaterialItemResponse
 (

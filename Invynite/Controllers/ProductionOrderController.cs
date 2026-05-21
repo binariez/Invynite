@@ -6,14 +6,9 @@ namespace Invynite.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductionOrderController : ControllerBase
+public class ProductionOrderController(IProductionOrderService productionService) : ControllerBase
 {
-    private readonly IProductionOrderService _productionService;
-
-    public ProductionOrderController(IProductionOrderService productionService)
-    {
-        _productionService = productionService;
-    }
+    private readonly IProductionOrderService _productionService = productionService;
 
     [HttpPost]
     [Route("production-orders")]

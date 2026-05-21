@@ -8,10 +8,12 @@ namespace Invynite.Controllers
     [Route("api/[controller]")]
     public class PurchaseOrderController(IPurchaseOrderService purchaseOrderService) : ControllerBase
     {
+        private readonly IPurchaseOrderService _purchaseOrderService = purchaseOrderService;
+
         [HttpPost]
         public async Task<IActionResult> CreatePurchaseOrder([FromBody] CreatePurchaseOrderRequest orderRequest)
         {
-            var result = await purchaseOrderService.CreatePurchaseOrder(orderRequest);
+            var result = await _purchaseOrderService.CreatePurchaseOrder(orderRequest);
 
             return Ok(result);
         }
@@ -19,7 +21,7 @@ namespace Invynite.Controllers
         [HttpPost("receive/pid={purchaseOrderId:int}&wid={warehouseId:int}")]
         public async Task<IActionResult> ReceivePurchaseOrder(int purchaseOrderId, int warehouseId)
         {
-            var result = await purchaseOrderService.ReceivePurchaseOrder(purchaseOrderId, warehouseId);
+            var result = await _purchaseOrderService.ReceivePurchaseOrder(purchaseOrderId, warehouseId);
 
             return Ok(result);
         }
@@ -27,7 +29,7 @@ namespace Invynite.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPurchaseOrderHistory()
         {
-            var result = await purchaseOrderService.GetPurchaseOrderHistory();
+            var result = await _purchaseOrderService.GetPurchaseOrderHistory();
 
             return Ok(result);
         }

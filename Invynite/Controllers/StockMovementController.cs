@@ -7,9 +7,11 @@ namespace Invynite.Controllers;
 [Route("api/[controller]")]
 public class StockMovementController(IStockMovementService stockMovementService) : ControllerBase
 {
+    private readonly IStockMovementService _stockMovementService = stockMovementService;
+
     [HttpGet]
     public async Task<IActionResult> GetStockMovementHistory()
     {
-        return Ok(await stockMovementService.GetStockMovementHistory());
+        return Ok(await _stockMovementService.GetStockMovementHistory());
     }
 }

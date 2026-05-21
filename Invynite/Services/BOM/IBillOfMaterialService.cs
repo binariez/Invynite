@@ -1,8 +1,8 @@
-﻿using Invynite.Services.Inventories.DTOs;
+﻿using Invynite.Services.BOM.DTOs;
 
-namespace Invynite.Services.Inventories;
+namespace Invynite.Services.BOM;
 
-public interface IProductlService
+public interface IBillOfMaterialService
 {
     Task<BillOfMaterialItemResponse> GetMaterialsByProductIdAsync(int productId);
     Task<ProductMaterialResponse> CountMaterialsByProductIdAsync(int prodId, int quantity);

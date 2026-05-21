@@ -1,5 +1,6 @@
 using Invynite.Infrastructure.Data;
 using Invynite.Middlewares;
+using Invynite.Services.BOM;
 using Invynite.Services.Inventories;
 using Invynite.Services.Procurement;
 using Invynite.Services.Productions;
@@ -23,10 +24,12 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 // business logic services
-builder.Services.AddScoped<IProductlService, ProductService>();
+builder.Services.AddScoped<IBillOfMaterialService, BillOfMaterialService>();
 builder.Services.AddScoped<IProductionOrderService, ProductionOrderService>();
 builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 builder.Services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
 
 // build app
 var app = builder.Build();
