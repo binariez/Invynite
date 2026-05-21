@@ -3,6 +3,5 @@
     public record LowStockDto(
         int MaterialId,
         string MaterialName,
-        IEnumerable<LowStockDetail> Details
-        );
+        IEnumerable<LowStockDetail> Details);
 }

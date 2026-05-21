@@ -67,7 +67,7 @@ namespace Invynite.Services.Inventories
                 throw new NotFoundException($"Material with id: {matId} does not exist");
         }
 
-        public async Task<IEnumerable<SimpleMaterialResponse>> GetAllProductsAsync(
+        public async Task<IEnumerable<SimpleMaterialResponse>> GetAllMaterialsAsync(
             string? searchTerm,
             string? sortColumn,
             string? sortOrder,

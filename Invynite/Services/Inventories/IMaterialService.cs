@@ -7,7 +7,7 @@ namespace Invynite.Services.Inventories
         Task<SimpleMaterialResponse> CreateAsync(MaterialRequest request);
         Task<SimpleMaterialResponse> UpdateAsync(int matId, MaterialRequest request);
         Task DeleteAsync(int matId);
-        Task<IEnumerable<SimpleMaterialResponse>> GetAllProductsAsync(
+        Task<IEnumerable<SimpleMaterialResponse>> GetAllMaterialsAsync(
             string? searchTerm,
             string? sortColumn,
             string? sortOrder,

@@ -1,7 +1,7 @@
 ﻿namespace Invynite.Services.Inventories.DTOs
 {
     public record SimpleMaterialResponse(
-    int Id,
+        int Id,
         string Name,
         decimal CurrentStock,
         string UnitOfMeasure);
