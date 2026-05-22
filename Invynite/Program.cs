@@ -40,7 +40,7 @@ using var scope = app.Services.CreateScope();
 
     // DANGER: Only use this in Development!
     // This wipes the DB and applies all migrations from scratch.
-    //await context.Database.EnsureDeletedAsync();
+    await context.Database.EnsureDeletedAsync();
     //await context.Database.MigrateAsync();
 
     //await Seeder.SeedAsync(context);

@@ -6,7 +6,7 @@ namespace Invynite.Services.Productions
 {
     public class StockMovementService(AppDbContext context) : IStockMovementService
     {
-        public async Task<List<GetStockMovementResponse>> GetStockMovementHistory()
+        public async Task<IEnumerable<GetStockMovementResponse>> GetStockMovementHistory()
         {
             var result = await context.StockMovements
                 .OrderByDescending(sm => sm.CreatedAt)

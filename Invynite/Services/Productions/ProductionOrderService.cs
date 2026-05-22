@@ -82,7 +82,7 @@ public class ProductionOrderService(AppDbContext context) : IProductionOrderServ
                     MaterialId = material.MaterialId,
                     Quantity = material.QuantityRequired,
                     WarehouseId = request.WarehouseId,
-                    MovementType = "OUT",
+                    MovementType = MovementType.OUT,
                     ReferenceId = productionOrder.Id
                 });
             }
@@ -115,7 +115,7 @@ public class ProductionOrderService(AppDbContext context) : IProductionOrderServ
                 ProductId = request.ProductId,
                 Quantity = request.QuantityToProduce,
                 WarehouseId = request.WarehouseId,
-                MovementType = "IN",
+                MovementType = MovementType.IN,
                 ReferenceId = productionOrder.Id
             });
 
@@ -136,7 +136,7 @@ public class ProductionOrderService(AppDbContext context) : IProductionOrderServ
         }
     }
 
-    public async Task<List<GetProductionOrderResponse>> GetProductionOrderHistory()
+    public async Task<IEnumerable<GetProductionOrderResponse>> GetProductionOrderHistory()
     {
         var result = await context.ProductionOrders
             .OrderByDescending(po => po.CreatedAt)

@@ -5,6 +5,6 @@ namespace Invynite.Services.Productions;
 public interface IProductionOrderService
 {
     Task<CreateProductionOrderResponse> Produce(CreateProductionOrderRequest request);
-    Task<List<GetProductionOrderResponse>> GetProductionOrderHistory();
+    Task<IEnumerable<GetProductionOrderResponse>> GetProductionOrderHistory();
     Task<GetProductionOrderResponse?> GetProductionOrderById(int orderId);
 }

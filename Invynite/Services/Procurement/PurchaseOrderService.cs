@@ -132,7 +132,7 @@ namespace Invynite.Services.Procurement
                         MaterialId = item.MaterialId,
                         Quantity = item.Quantity,
                         WarehouseId = warehouseId,
-                        MovementType = "IN",
+                        MovementType = MovementType.IN,
                         CreatedAt = DateTime.UtcNow,
                         ReferenceId = purchaseOrderId
                     });

@@ -4,5 +4,5 @@ namespace Invynite.Services.Productions;
 
 public interface IStockMovementService
 {
-    Task<List<GetStockMovementResponse>> GetStockMovementHistory();
+    Task<IEnumerable<GetStockMovementResponse>> GetStockMovementHistory();
 }
