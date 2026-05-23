@@ -1,4 +1,5 @@
 ﻿using Invynite.Domain.Entities.BOM;
+using Invynite.Domain.Entities.Master;
 using Invynite.Infrastructure.Data;
 using Invynite.Middlewares.Exceptions;
 using Invynite.Services.BOM.DTOs;
@@ -100,5 +101,32 @@ public class BillOfMaterialService(AppDbContext context) : IBillOfMaterialServic
         await context.SaveChangesAsync();
 
         return await GetMaterialsByProductIdAsync(request.ProductId);
+    }
+
+    public async Task<BillOfMaterialItemResponse> UpdateBillOfMaterialsAsync(int prodId, UpdateBomRequest request)
+    {
+        var current = await context.BillOfMaterials
+            .Include(b => b.BillOfMaterialItems)
+            .FirstOrDefaultAsync(b => b.ProductId == prodId);
+
+        if (current == null)
+            throw new NotFoundException($"No BOM found with product id: {prodId}.");
+        var materials = new List<BillOfMaterialItem>();
+
+        foreach (var material in request.Recipes)
+        {
+            materials.Add(new BillOfMaterialItem
+            {
+                MaterialId = material.Key,
+                QuantityRequired = material.Value,
+                Material = null!
+            });
+        }
+
+        current.BillOfMaterialItems = materials;
+
+        await context.SaveChangesAsync();
+
+        return await GetMaterialsByProductIdAsync (prodId);
     }
 }

@@ -35,4 +35,12 @@ public class BillOfMaterialController(IBillOfMaterialService bomService) : Contr
 
         return CreatedAtAction(nameof(GetMaterialsByProductId), new { prodId = result.ProductId }, result);
     }
+
+    [HttpPut("{prodId:int}")]
+    public async Task<IActionResult> UpdateBillOfMaterial([FromBody] UpdateBomRequest request, [FromRoute] int prodId)
+    {
+        var result = await _bomService.UpdateBillOfMaterialsAsync(prodId, request);
+
+        return Ok(result);
+    }
 }
