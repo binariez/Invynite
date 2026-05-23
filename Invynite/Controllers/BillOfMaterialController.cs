@@ -1,4 +1,5 @@
 ﻿using Invynite.Services.BOM;
+using Invynite.Services.BOM.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Invynite.Controllers;
@@ -25,5 +26,13 @@ public class BillOfMaterialController(IBillOfMaterialService bomService) : Contr
         var result = await _bomService.CountMaterialsByProductIdAsync(prodId, quantity);
 
         return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBillOfMaterial([FromBody] CreateBomRequest request)
+    {
+        var result = await _bomService.CreateBillOfMaterialAsync(request);
+
+        return CreatedAtAction(nameof(GetMaterialsByProductId), new { prodId = result.ProductId }, result);
     }
 }

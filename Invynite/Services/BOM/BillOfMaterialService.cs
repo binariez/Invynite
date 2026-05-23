@@ -1,22 +1,19 @@
-﻿using Invynite.Infrastructure.Data;
+﻿using Invynite.Domain.Entities.BOM;
+using Invynite.Infrastructure.Data;
 using Invynite.Middlewares.Exceptions;
 using Invynite.Services.BOM.DTOs;
+using Invynite.Services.Inventories.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Invynite.Services.BOM;
 
-public class BillOfMaterialService : IBillOfMaterialService
+public class BillOfMaterialService(AppDbContext context) : IBillOfMaterialService
 {
-    private readonly AppDbContext _context;
-
-    public BillOfMaterialService(AppDbContext context)
-    {
-        _context = context;
-    }
+    private readonly AppDbContext context = context;
 
     public async Task<BillOfMaterialItemResponse> GetMaterialsByProductIdAsync(int productId)
     {
-        var materials = await _context.BillOfMaterials
+        var materials = await context.BillOfMaterials
             .Where(b => b.ProductId == productId)
             .Select(b => new BillOfMaterialItemResponse
             (
@@ -38,7 +35,7 @@ public class BillOfMaterialService : IBillOfMaterialService
 
     public async Task<ProductMaterialResponse> CountMaterialsByProductIdAsync(int prodId, int quantity)
     {
-        var result = await _context.BillOfMaterials
+        var result = await context.BillOfMaterials
             .Where(bom => bom.ProductId == prodId)
             .Select(bom => new
             {
@@ -48,7 +45,7 @@ public class BillOfMaterialService : IBillOfMaterialService
                     items.MaterialId,
                     MaterialName = items.Material.Name,
                     QuantityRequired = items.QuantityRequired * quantity,
-                    CurrentStock = _context.Inventories
+                    CurrentStock = context.Inventories
                         .Where(inv => inv.MaterialId == items.MaterialId)
                         .Select(inv => (decimal?)inv.Quantity)
                         .FirstOrDefault() ?? 0
@@ -75,5 +72,33 @@ public class BillOfMaterialService : IBillOfMaterialService
             quantity,
             requiredMaterials
         );
+    }
+
+    public async Task<BillOfMaterialItemResponse> CreateBillOfMaterialAsync(CreateBomRequest request)
+    {
+        if (context.BillOfMaterials.Any(b => b.ProductId == request.ProductId))
+            throw new SameNameException("Product already has a bill of material");
+
+        var bom = new BillOfMaterial { ProductId = request.ProductId };
+
+        var bomItems = new List<BillOfMaterialItem>();
+
+        foreach (var material in request.Recipes)
+        {
+            bomItems.Add(new BillOfMaterialItem
+            {
+                MaterialId = material.Key,
+                QuantityRequired = material.Value,
+                Material = null!
+            });
+        }
+
+        bom.BillOfMaterialItems = bomItems;
+
+        await context.BillOfMaterials.AddAsync(bom);
+
+        await context.SaveChangesAsync();
+
+        return await GetMaterialsByProductIdAsync(request.ProductId);
     }
 }

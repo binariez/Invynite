@@ -12,7 +12,7 @@ public class ProductionOrder
     public int WarehouseId { get; set; }
     public Warehouse Warehouse { get; set; } = null!;
     public ProductionStatus Status { get; set; }
-    public DateTime CreatedAt { get; init; } = DateTime.Now;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
     public ICollection<ProductionConsumption> ProductionConsumptions { get; set; } = [];
     public byte[] RowVersion { get; set; } = default!;
 }

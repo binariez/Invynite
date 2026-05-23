@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Invynite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260515103126_init")]
-    partial class init
+    [Migration("20260522120856_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

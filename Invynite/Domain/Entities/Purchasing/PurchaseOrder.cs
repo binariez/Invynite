@@ -8,7 +8,7 @@ public class PurchaseOrder
     public int Id { get; init; }
     public int SupplierId {  get; set; }
     public Supplier Supplier { get; set; } = null!;
-    public DateTime OrderDate { get; set; }
+    public DateTime OrderDate { get; init; } = DateTime.UtcNow;
     public PurchaseOrderStatus Status { get; set; }
     public ICollection<PurchaseOrderItem> PurchaseOrderItems { get; set; } = [];
 }

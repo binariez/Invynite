@@ -4,5 +4,10 @@ namespace Invynite.Services.Productions;
 
 public interface IStockMovementService
 {
-    Task<IEnumerable<GetStockMovementResponse>> GetStockMovementHistory();
+    Task<IEnumerable<GetStockMovementResponse>> GetStockMovementHistory(
+        string? searchTerm,
+        string? sortColumn,
+        string? sortOrder,
+        int page,
+        int pagesize);
 }
