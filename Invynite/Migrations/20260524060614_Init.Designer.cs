@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Invynite.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260522120856_Init")]
+    [Migration("20260524060614_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -115,6 +115,49 @@ namespace Invynite.Migrations
                         {
                             t.HasCheckConstraint("CK_Inventory_ProductOrMaterial", "(\"ProductId\" IS NOT NULL AND \"MaterialId\" IS NULL)\r\nOR\r\n(\"ProductId\" IS NULL AND \"MaterialId\" IS NOT NULL)");
                         });
+                });
+
+            modelBuilder.Entity("Invynite.Domain.Entities.Inven.InventoryAdjustment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Difference")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("MaterialId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("NewQuantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PreviousQuantity")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Reason")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("WarehouseId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaterialId");
+
+                    b.HasIndex("WarehouseId");
+
+                    b.ToTable("InventoryAdjustments");
                 });
 
             modelBuilder.Entity("Invynite.Domain.Entities.Inven.StockMovement", b =>
@@ -459,6 +502,25 @@ namespace Invynite.Migrations
                     b.Navigation("Material");
 
                     b.Navigation("Product");
+
+                    b.Navigation("Warehouse");
+                });
+
+            modelBuilder.Entity("Invynite.Domain.Entities.Inven.InventoryAdjustment", b =>
+                {
+                    b.HasOne("Invynite.Domain.Entities.Master.Material", "Material")
+                        .WithMany()
+                        .HasForeignKey("MaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Invynite.Domain.Entities.Master.Warehouse", "Warehouse")
+                        .WithMany()
+                        .HasForeignKey("WarehouseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Material");
 
                     b.Navigation("Warehouse");
                 });

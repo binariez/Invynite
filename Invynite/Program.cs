@@ -30,6 +30,7 @@ builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 builder.Services.AddScoped<IPurchaseOrderService, PurchaseOrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IInventoryAdjustmentService, InventoryAdjustmentService>();
 
 // build app
 var app = builder.Build();
@@ -40,10 +41,10 @@ using var scope = app.Services.CreateScope();
 
     // DANGER: Only use this in Development!
     // This wipes the DB and applies all migrations from scratch.
-    //await context.Database.EnsureDeletedAsync();
-    //await context.Database.MigrateAsync();
+    await context.Database.EnsureDeletedAsync();
+    await context.Database.MigrateAsync();
 
-    //await Seeder.SeedAsync(context);
+    await Seeder.SeedAsync(context);
 }
 
 // Configure the HTTP request pipeline.

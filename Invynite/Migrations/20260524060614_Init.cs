@@ -150,6 +150,37 @@ namespace Invynite.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "InventoryAdjustments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WarehouseId = table.Column<int>(type: "int", nullable: false),
+                    MaterialId = table.Column<int>(type: "int", nullable: false),
+                    PreviousQuantity = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    NewQuantity = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Difference = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InventoryAdjustments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_InventoryAdjustments_Materials_MaterialId",
+                        column: x => x.MaterialId,
+                        principalTable: "Materials",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InventoryAdjustments_Warehouses_WarehouseId",
+                        column: x => x.WarehouseId,
+                        principalTable: "Warehouses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductionOrders",
                 columns: table => new
                 {
@@ -336,6 +367,16 @@ namespace Invynite.Migrations
                 column: "WarehouseId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_InventoryAdjustments_MaterialId",
+                table: "InventoryAdjustments",
+                column: "MaterialId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InventoryAdjustments_WarehouseId",
+                table: "InventoryAdjustments",
+                column: "WarehouseId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Materials_Name",
                 table: "Materials",
                 column: "Name",
@@ -425,6 +466,9 @@ namespace Invynite.Migrations
 
             migrationBuilder.DropTable(
                 name: "Inventories");
+
+            migrationBuilder.DropTable(
+                name: "InventoryAdjustments");
 
             migrationBuilder.DropTable(
                 name: "ProductionConsumptions");
