@@ -129,4 +129,18 @@ public class BillOfMaterialService(AppDbContext context) : IBillOfMaterialServic
 
         return await GetMaterialsByProductIdAsync (prodId);
     }
+
+    public async Task DeleteBillOfMaterialAsync(int prodId)
+    {
+        try
+        {
+            await context.BillOfMaterials
+            .Where(b => b.ProductId == prodId)
+            .ExecuteDeleteAsync();
+        }
+        catch
+        {
+            throw new NotFoundException($"No BOM found with product id: {prodId}.");
+        }
+    }
 }

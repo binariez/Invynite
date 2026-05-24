@@ -8,4 +8,5 @@ public interface IBillOfMaterialService
     Task<ProductMaterialResponse> CountMaterialsByProductIdAsync(int prodId, int quantity);
     Task<BillOfMaterialItemResponse> CreateBillOfMaterialAsync(CreateBomRequest request);
     Task<BillOfMaterialItemResponse> UpdateBillOfMaterialsAsync(int prodId, UpdateBomRequest request);
+    Task DeleteBillOfMaterialAsync(int prodId);
 }

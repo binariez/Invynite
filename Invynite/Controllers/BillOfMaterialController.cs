@@ -43,4 +43,12 @@ public class BillOfMaterialController(IBillOfMaterialService bomService) : Contr
 
         return Ok(result);
     }
+
+    [HttpDelete("{prodId:int}")]
+    public async Task<IActionResult> DeleteBillOfMaterial([FromRoute] int prodId)
+    {
+        await _bomService.DeleteBillOfMaterialAsync(prodId);
+
+        return NoContent();
+    }
 }
