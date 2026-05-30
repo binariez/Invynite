@@ -308,7 +308,7 @@ Follow these steps to run the Invynite API server locally:
    ```
 
 ### Running the Application
-Open your terminal inside the project directory (`c:\!Web Dev\!GIT REPO\Invynite\Invynite`) and run:
+Open your terminal inside the project directory and run:
 
 ```bash
 dotnet run
